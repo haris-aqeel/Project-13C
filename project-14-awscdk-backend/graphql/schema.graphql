@@ -1,0 +1,30 @@
+# graphql/schema.graphql
+type Lolly {
+    recipientName: String!
+    senderName: String!
+    message: String!
+    topColor: String!
+    mediumColor: String!
+    bottomColor: String!
+    path: String!
+  }
+
+input LollyInput{
+      recipientName: String!
+      message: String!
+      senderName: String!
+      topColor: String!
+      mediumColor: String!
+      bottomColor: String!
+      path: String!
+}
+
+type Query {
+  getAllLollies: [Lolly]!
+  getLollyBySlug(path: String!): Lolly
+}
+
+type Mutation {
+    createLolly(lolly: LollyInput!): Lolly
+  }
+;
