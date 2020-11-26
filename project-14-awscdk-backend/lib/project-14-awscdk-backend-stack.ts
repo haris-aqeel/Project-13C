@@ -2,11 +2,29 @@ import * as cdk from '@aws-cdk/core';
 import * as appsync from '@aws-cdk/aws-appsync';
 import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as lambda from '@aws-cdk/aws-lambda';
+import * as CodeBuild from '@aws-cdk/aws-codebuild'
+import * as S3 from '@aws-cdk/aws-s3'
+import * as CodePipeline from '@aws-cdk/aws-codepipeline'
+import * as CodePipelineAction from '@aws-cdk/aws-codepipeline-actions'
+import * as cloudfront from '@aws-cdk/aws-cloudfront';
+import * as origins from '@aws-cdk/aws-cloudfront-origins';
 
 export class Project14AwscdkBackendStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+     // Amazon S3 bucket to store CRA website
+     const bucketWebsite = new S3.Bucket(this, 'Files', {
+      websiteIndexDocument: 'index.html',
+      websiteErrorDocument: 'error.html',
+      publicReadAccess: true,
+    })
+
+    const dist = new cloudfront.Distribution(this, 'Distribution', {
+      defaultBehavior: { origin: new origins.S3Origin(bucketWebsite) },
+    });
+
+    
     // The code that defines your stack goes here
     const api = new appsync.GraphqlApi(this, 'Api', {
       name: 'cdk-lolly-appsync-api',
