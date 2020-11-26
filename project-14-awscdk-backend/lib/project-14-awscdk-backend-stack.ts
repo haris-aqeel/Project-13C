@@ -13,17 +13,6 @@ export class Project14AwscdkBackendStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-     // Amazon S3 bucket to store CRA website
-     const bucketWebsite = new S3.Bucket(this, 'Files', {
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'error.html',
-      publicReadAccess: true,
-    })
-
-    const dist = new cloudfront.Distribution(this, 'Distribution', {
-      defaultBehavior: { origin: new origins.S3Origin(bucketWebsite) },
-    });
-
     
     // The code that defines your stack goes here
     const api = new appsync.GraphqlApi(this, 'Api', {
